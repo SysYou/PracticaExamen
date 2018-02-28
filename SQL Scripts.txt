@@ -1,0 +1,183 @@
+Practica de Examen  --  Script
+
+***************Tabla Genero**************
+
+USE [Ropa]
+GO
+
+/****** Object:  Table [dbo].[Genero]    Script Date: 2/27/2018 5:17:36 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Genero](
+	[iId] [int] NOT NULL,
+	[vGenero] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Genero] PRIMARY KEY CLUSTERED 
+(
+	[iId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+***************Tabla Ropa*******************
+
+USE [Ropa]
+GO
+
+/****** Object:  Table [dbo].[Ropa]    Script Date: 2/27/2018 5:18:29 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Ropa](
+	[iId] [int] IDENTITY(1,1) NOT NULL,
+	[vNombre] [varchar](50) NOT NULL,
+	[iGenero] [int] NOT NULL,
+	[vCategoria] [varchar](50) NOT NULL,
+	[iValor] [decimal](18, 0) NOT NULL,
+	[bDisponible] [bit] NOT NULL,
+ CONSTRAINT [PK_Ropa] PRIMARY KEY CLUSTERED 
+(
+	[iId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+******************Store Procedures****************\
+
+USE [Ropa]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Mostrar]    Script Date: 2/27/2018 5:18:50 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create PROCEDURE [dbo].[sp_Mostrar] 
+
+AS
+
+BEGIN
+
+SET NOCOUNT ON;
+
+SELECT r.iId, r.vNombre, g.vGenero, R.vCategoria, r.iValor, r.bDisponible
+ FROM Ropa R, Genero G
+ Where R.iGenero = G.iId;
+
+END
+
+************************
+
+USE [Ropa]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Insertar]    Script Date: 2/27/2018 5:19:09 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[sp_Insertar] 
+
+ 
+  @vNombre varchar(50),
+    @iGenero int,
+      @vCategoria varchar(50),
+          @iValor decimal(18,2),
+          @bDisponible bit
+
+AS
+
+BEGIN
+
+SET NOCOUNT ON;
+
+INSERT INTO ROPA (vNombre, iGenero, vCategoria, iValor, bDisponible) 
+Values (@vNombre, @iGenero, @vCategoria, @iValor, @bDisponible);
+
+END
+
+********************************
+
+USE [Ropa]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Actualizar]    Script Date: 2/27/2018 5:19:26 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[sp_Actualizar] 
+
+ @iId int,
+  @vNombre varchar(50),
+    @iGenero int,
+      @vCategoria varchar(50),
+          @iValor decimal(18,2),
+          @bDisponible bit
+
+AS
+
+BEGIN
+
+SET NOCOUNT ON;
+
+UPDATE ROPA SET  
+vNombre= @vNombre, 
+iGenero = @iGenero, 
+vCategoria = @vCategoria, 
+iValor = @iValor,
+ bDisponible= @bDisponible
+
+ WHERE (iId = @iId);
+
+
+END
+
+**********************************************
+
+USE [Ropa]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Eliminar]    Script Date: 2/27/2018 5:19:39 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[sp_Eliminar] 
+
+ @iId int
+  
+
+AS
+
+BEGIN
+
+SET NOCOUNT ON;
+
+ Delete from ROPA 
+ WHERE (iId = @iId);
+
+END
+
+
+******************************************
+
